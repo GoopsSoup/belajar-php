@@ -1,19 +1,18 @@
 <?php
-    class Bank {
-        private $value;
-        private string $username;
+    class Product {
+        private string $name;
+        private int $price;
 
-        public function __construct($value, string $username) {
-            $this->value = $value;
-            $this->username = $username;
+        public function __construct(string $name, $price) {
+            $this->name = $name; 
+            $this->price = $price; 
         }
 
-        public function getUser() {
-            return "$this->username Bank worth <$this->value>";
+        public function displayProduct():string {
+            return "$this->name price: $this->price";
         }
     }
 
-
-    $user = new Bank(8000000, "Andhika");
-    echo $user->getUser();
+    $show = new Product("Laptop", 10000000);
+    echo $show->displayUser();
 ?>
