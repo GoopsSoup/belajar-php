@@ -1,18 +1,25 @@
 <?php
-    class Product {
+    class Status {
         private string $name;
-        private int $price;
+        private int $health;
 
-        public function __construct(string $name, $price) {
+        public function __construct(string $name, int $health) {
             $this->name = $name; 
-            $this->price = $price; 
+            $this->health = $health; 
         }
 
-        public function displayProduct():string {
-            return "$this->name price: $this->price";
+        public function damageTaken(int $damage):void {
+            $this->health -= $damage;
+        }
+
+        public function showStatus():string {
+            return "Name: $this->name \nHealth: $this->health\n";
         }
     }
 
-    $show = new Product("Laptop", 10000000);
-    echo $show->displayUser();
+    $player = new Status("Player-1", 100);
+    echo $player->showStatus();
+    
+    echo $player->damageTaken(29);
+    echo $player->showStatus();
 ?>
