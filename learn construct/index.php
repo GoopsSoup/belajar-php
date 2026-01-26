@@ -1,39 +1,38 @@
 <?php
-    class Status {
-        private string $name;
-        private int $health;
+    class User {
+        private string $username;
+        private $passwordHash;
+        private bool $isLoggedIn;
 
-        public function __construct(string $name, int $health) {
-            $this->name = $name; 
-            $this->health = $health; 
+        public function __construct($username, $rawPassword) {
+            $this->passwordHash = password_hash($rawPassword, PASSWORD_DEFAULT);
+            $this->username = $username;    
+            $this->isLoggedIn = false;
         }
 
-        public function damageTaken(int $damage):void  {
-            $this->health = max(0, $this->health - $damage);
+        public function login(string $rawPassword):bool {
+            if (password_verify($rawPassword, $this->passwordHash)) {
+                $this->isLoggedIn = true;
+                return true;
+            }
+            
+            return false;
         }
 
-        public function healthHealed(int $heal): void {
-            $this->health = min(100, $this->health + $heal);
+        public function logout(): void {
+            $this->isLoggedIn = false;
         }
 
-        public function isDead():bool {
-            return $this->health === 0;
+        public function isLoggedIn(): bool {
+            return $this->isLoggedIn;
         }
 
-        public function showStatus():string {
-            return "Name: $this->name \nHealth: $this->health\n\n";
+        public function changePassword(string $currentPassword, string $newPassword):bool {
+            if (!password_verify($currentPassword, $this->passwordHash)) {
+                return false;
+            }
+            $this->passwordHash = password_hash($newPassword, PASSWORD_DEFAULT);
         }
+
     }
-
-    $player = new Status("Player-1", 100);
-    echo $player->showStatus();
-
-    $player->damageTaken(67);
-    echo $player->showStatus();
-
-    $player->healthHealed(100);
-    echo $player->showStatus();
-
-    $player->damageTaken(67);
-    echo $player->showStatus();
 ?>
