@@ -1,12 +1,23 @@
 <?php
+    ini_set('display_errors', 1);
+    error_reporting(E_ALL);
+
+    class Notifier {
+        public function send(string $message):void {
+            echo "New notification: $message";
+        }
+    }
+
     class User {
+        private Notifier $notifier;
         private string $username;
-        private $passwordHash;
+        private string $passwordHash;
         private bool $isLoggedIn;
 
-        public function __construct($username, $rawPassword) {
+        public function __construct(Notifier $notifier, $username, $rawPassword) {
             $this->passwordHash = password_hash($rawPassword, PASSWORD_DEFAULT);
-            $this->username = $username;    
+            $this->username = $username; 
+            $this->notifier = $notifier;   
             $this->isLoggedIn = false;
         }
 
@@ -32,7 +43,17 @@
                 return false;
             }
             $this->passwordHash = password_hash($newPassword, PASSWORD_DEFAULT);
+            return true;
+        }
+
+        public function welcome(): void {
+            $this->notifier->send("Welcome back!");
         }
 
     }
+
+    $notifier = new Notifier();
+    $user = new User($notifier, "Andhika", "secret");
+    $user->welcome();
 ?>
+
