@@ -2,21 +2,39 @@
     ini_set('display_errors', 1);
     error_reporting(E_ALL);
 
-    class Notifier {
+    interface NotifierInterface {
+        public function send(string $message):void;
+    }
+
+    class Id {
+        private string $value;
+
+        public function __construct(string $value) {
+            $this->value = $value;
+        }
+
+        public function show():void {
+            echo "Your Id is: {$this->value}";
+        }
+    }
+
+    class Notifier implements NotifierInterface {
         public function send(string $message):void {
             echo "New notification: $message";
         }
     }
 
     class User {
-        private Notifier $notifier;
+        private NotifierInterface $notifier;
+        private Id $info;
         private string $username;
         private string $passwordHash;
         private bool $isLoggedIn;
 
-        public function __construct(Notifier $notifier, $username, $rawPassword) {
+        public function __construct(Id $info, NotifierInterface $notifier, $username, $rawPassword) {
             $this->passwordHash = password_hash($rawPassword, PASSWORD_DEFAULT);
-            $this->username = $username; 
+            $this->username = $username;
+            $this->info = $info; 
             $this->notifier = $notifier;   
             $this->isLoggedIn = false;
         }
@@ -47,13 +65,19 @@
         }
 
         public function welcome(): void {
-            $this->notifier->send("Welcome back!");
+            $this->notifier->send("Welcome back!\n");
+        }
+
+        public function userID(): void {
+            $this->info->show();
         }
 
     }
 
+    $id = new Id("22234440987232");
     $notifier = new Notifier();
-    $user = new User($notifier, "Andhika", "secret");
+    $user = new User($id ,$notifier, "Andhika", "secret");
     $user->welcome();
+    $user->userID();
 ?>
 

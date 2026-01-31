@@ -1,38 +1,40 @@
 <?php
-    class User {
-        private string $username;
-        private $passwordHash;
-        private bool $isLoggedIn;
+    class Account {
+        protected string $id;
+        protected float $balance;
 
-        public function __construct($username, $rawPassword) {
-            $this->passwordHash = password_hash($rawPassword, PASSWORD_DEFAULT);
-            $this->username = $username;    
-            $this->isLoggedIn = false;
+        public function __construct(string $id, float $balance) {
+            $this->id = $id;
+            $this->balance = $balance;
         }
 
-        public function login(string $rawPassword):bool {
-            if (password_verify($rawPassword, $this->passwordHash)) {
-                $this->isLoggedIn = true;
-                return true;
-            }
-            
-            return false;
+        public function getSummary():string {
+            return "Account <{$this->id}> Has balance {$this->balance}";
         }
-
-        public function logout(): void {
-            $this->isLoggedIn = false;
-        }
-
-        public function isLoggedIn(): bool {
-            return $this->isLoggedIn;
-        }
-
-        public function changePassword(string $currentPassword, string $newPassword):bool {
-            if (!password_verify($currentPassword, $this->passwordHash)) {
-                return false;
-            }
-            $this->passwordHash = password_hash($newPassword, PASSWORD_DEFAULT);
-        }
-
     }
+
+    class PremiumAccount extends Account{
+        private int $rewardPoints = 0;
+
+        public function __construct(string $id, float $balance) {
+            parent::__construct($id, $balance);
+        }
+
+        public function addPoints(int $points):void {
+            $this->rewardPoints += $points;
+        }
+
+        public function getSummary():string {
+            return "Account <{$this->id}> Has balance {$this->balance} and {$this->rewardPoints} points";
+        }
+    }
+
+    $normalAcc = new Account("A-001", 20023.33);
+    echo $normalAcc->getSummary();
+    echo "\n";
+
+    $premiumAcc = new PremiumAccount("AP-001", 40000.3233);
+    $premiumAcc->addPoints(460);
+    echo $premiumAcc->getSummary();
+
 ?>
