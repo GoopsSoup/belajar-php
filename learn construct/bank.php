@@ -36,5 +36,5 @@
     $premiumAcc = new PremiumAccount("AP-001", 40000.3233);
     $premiumAcc->addPoints(460);
     echo $premiumAcc->getSummary();
-
+    echo "\n";
 ?>
