@@ -2,10 +2,10 @@
 class Store {
     private $items = [];
     private int $price;
-    private string $customer;
+    private string $owner;
 
-    public function __construct(string $customer) {
-        $this->customer = $customer;
+    public function __construct(string $owner) {
+        $this->owner = $owner;
     }
 
     public function addItem($item): string {
@@ -21,9 +21,11 @@ class Store {
 
 class Customer extends Store{
     
-    public function __construct(string $customer) {
-        parent::__construct($customer);
+    public function __construct(string $owner) {
+        parent::__construct($owner);
     }
+
+    
 }
 
 $bought = new Store("Andhika");
