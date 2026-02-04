@@ -76,7 +76,7 @@
 
     $id = new Id("22234440987232");
     $notifier = new Notifier();
-    $user = new User($id ,$notifier, "Andhika", "secret");
+    $user = new User($id ,$notifier, "Andhika", "password");
     $user->welcome();
     $user->userID();
 ?>
